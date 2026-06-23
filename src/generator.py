@@ -26,13 +26,12 @@ def render_report(analytics_data: dict, template_dir: str, output_path: str):
     else:
         print(f"⚠️ Warning: styles.css not found at {css_path}. Report will lack styling.")
 
-    # Render variables AND the raw CSS string into the template context
     html_content = template.render(
         class_metrics=analytics_data["class_metrics"],
         component_metrics=analytics_data["component_metrics"],
         at_risk_students=analytics_data["at_risk_students"],
         student_data=analytics_data["student_data"],
-        embedded_css=css_content  # <-- Passing the CSS here
+        embedded_css=css_content 
     )
 
     output_dir = os.path.dirname(output_path)

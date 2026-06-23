@@ -1,15 +1,15 @@
 /* --- Core Reset & Design Variables --- */
 :root {
-    --bg-main: #0f172a;       /* Deep slate/ink background */
-    --bg-panel: #1e293b;      /* Slightly lighter panel background */
-    --border-color: #334155;  /* Subtle divider color */
-    --text-primary: #f8fafc;  /* Crisp white text */
-    --text-muted: #94a3b8;    /* Soft gray description text */
+    --bg-main: #050505;       /* Pure ink black background */
+    --bg-panel: #121212;      /* Matte dark charcoal panel background */
+    --border-color: #262626;  /* Minimalist dark gray divider */
+    --text-primary: #ffffff;  /* Solid white text */
+    --text-muted: #737373;    /* Muted ash gray for secondary text */
     
-    /* Muted Status Colors */
-    --accent-green: #34d399;  /* Emerald for high marks/pass rates */
-    --accent-red: #f87171;    /* Crimson for warnings/risk */
-    --accent-blue: #60a5fa;   /* Focal blue for interactive metrics */
+    /* True Minimalist Status Colors */
+    --accent-green: #a3e635;  /* High-contrast lime/emerald */
+    --accent-red: #f87171;    /* Warning crimson */
+    --accent-blue: #ffffff;   /* Replaced blue with crisp white for headers/accents */
 }
 
 * {
