@@ -1,0 +1,27 @@
+{
+  "passing_threshold_pct": 40.0,
+  "grading_scale": [
+    {"grade": "A", "min_pct": 85},
+    {"grade": "B", "min_pct": 70},
+    {"grade": "C", "min_pct": 55},
+    {"grade": "D", "min_pct": 40},
+    {"grade": "F", "min_pct": 0}
+  ],
+  "assessments": {
+    "Internal_Tests": {
+      "csv_column": "Internal_Tests",
+      "max_marks": 15,
+      "weight_pct": 20
+    },
+    "Mid_Term": {
+      "csv_column": "Mid_Term",
+      "max_marks": 40,
+      "weight_pct": 30
+    },
+    "End_Semester": {
+      "csv_column": "End_Semester",
+      "max_marks": 60,
+      "weight_pct": 50
+    }
+  }
+}
