@@ -1,15 +1,14 @@
-/* --- Core Reset & Design Variables --- */
+
 :root {
-    --bg-main: #050505;       /* Pure ink black background */
-    --bg-panel: #121212;      /* Matte dark charcoal panel background */
-    --border-color: #262626;  /* Minimalist dark gray divider */
-    --text-primary: #ffffff;  /* Solid white text */
-    --text-muted: #737373;    /* Muted ash gray for secondary text */
+    --bg-main: #050505;       
+    --bg-panel: #121212;      
+    --border-color: #262626;  
+    --text-primary: #ffffff;  
+    --text-muted: #737373;    
     
-    /* True Minimalist Status Colors */
-    --accent-green: #a3e635;  /* High-contrast lime/emerald */
-    --accent-red: #f87171;    /* Warning crimson */
-    --accent-blue: #ffffff;   /* Replaced blue with crisp white for headers/accents */
+    --accent-green: #a3e635;  
+    --accent-red: #f87171;    
+    --accent-blue: #ffffff;   
 }
 
 * {
@@ -31,7 +30,6 @@ body {
     margin: 0 auto;
 }
 
-/* --- Typography & Header --- */
 header {
     margin-bottom: 2.5rem;
 }
@@ -55,7 +53,6 @@ h2 {
     letter-spacing: -0.01em;
 }
 
-/* --- KPI Scorecard Cards --- */
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -84,7 +81,6 @@ h2 {
     font-weight: 700;
 }
 
-/* --- Layout Panels --- */
 .panel {
     background-color: var(--bg-panel);
     border: 1px solid var(--border-color);
@@ -105,7 +101,6 @@ h2 {
     }
 }
 
-/* --- Modern Clean Tables --- */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -143,7 +138,6 @@ tr:last-child td {
     color: var(--text-muted);
 }
 
-/* --- Roster Header Controls --- */
 .roster-header {
     display: flex;
     justify-content: space-between;
@@ -173,7 +167,6 @@ tr:last-child td {
     border-color: var(--accent-blue);
 }
 
-/* --- At-Risk Lists & Status Elements --- */
 .risk-list {
     list-style: none;
 }
@@ -207,7 +200,6 @@ tr:last-child td {
     padding: 1rem 0;
 }
 
-/* --- Accent Utilities --- */
 .accent-green { color: var(--accent-green); }
 .accent-pct { color: var(--accent-blue); }
 

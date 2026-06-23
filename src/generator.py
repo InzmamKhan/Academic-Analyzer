@@ -17,7 +17,6 @@ def render_report(analytics_data: dict, template_dir: str, output_path: str):
     except Exception as e:
         raise FileNotFoundError(f"Could not load template 'dashboard.html'. Details: {e}")
 
-    # --- NEW FEATURE: Read the CSS file directly ---
     css_path = os.path.join(template_dir, "styles.css")
     css_content = ""
     if os.path.exists(css_path):
