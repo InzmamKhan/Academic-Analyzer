@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Analytics Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Academic Performance</h1>
+            <p class="subtitle">Cohort Grading & Analytics Report</p>
+        </header>
+
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <h3>Class Average</h3>
+                <div class="kpi-value">{{ class_metrics.class_average }}%</div>
+            </div>
+            <div class="kpi-card">
+                <h3>Median Score</h3>
+                <div class="kpi-value">{{ class_metrics.class_median }}%</div>
+            </div>
+            <div class="kpi-card">
+                <h3>Passing Rate</h3>
+                <div class="kpi-value accent-green">{{ class_metrics.pass_rate_pct }}%</div>
+            </div>
+            <div class="kpi-card">
+                <h3>Total Students</h3>
+                <div class="kpi-value">{{ class_metrics.total_students }}</div>
+            </div>
+        </section>
+
+        <div class="split-layout">
+            <div class="panel">
+                <h2>Assessment Weights & Performance</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Max Marks</th>
+                            <th>Weight</th>
+                            <th>Normalized Avg</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for comp in component_metrics %}
+                        <tr>
+                            <td><strong>{{ comp.category.replace('_', ' ') }}</strong></td>
+                            <td>{{ comp.max_marks }}</td>
+                            <td>{{ comp.weight }}%</td>
+                            <td>{{ comp.norm_average }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel">
+                <h2>Attention Required (At-Risk)</h2>
+                {% if at_risk_students %}
+                <ul class="risk-list">
+                    {% for student in at_risk_students %}
+                    <li class="risk-item">
+                        <span>{{ student.Student_Name }} <small>({{ student.Student_ID }})</small></span>
+                        <span class="risk-badge">{{ student.Final_Weighted_Pct | round(1) }}%</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="empty-state">🎉 All students are currently meeting passing thresholds.</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <section class="panel roster-section">
+            <div class="roster-header">
+                <h2>Student Roster</h2>
+                <input type="text" id="searchBar" placeholder="Search by student name or ID..." onkeyup="filterTable()">
+            </div>
+            
+            <table id="rosterTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">ID <span>↕</span></th>
+                        <th onclick="sortTable(1)">Name <span>↕</span></th>
+                        <th onclick="sortTable(2)">Internal Tests <span>↕</span></th>
+                        <th onclick="sortTable(3)">Mid-Term <span>↕</span></th>
+                        <th onclick="sortTable(4)">End-Sem <span>↕</span></th>
+                        <th onclick="sortTable(5)">Weighted Grade <span>↕</span></th>
+                        <th onclick="sortTable(6)">Grade <span>↕</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in student_data %}
+                    <tr>
+                        <td><small class="text-muted">{{ student.Student_ID }}</small></td>
+                        <td><strong>{{ student.Student_Name }}</strong></td>
+                        <td>{{ student.Internal_Tests | int }}/15 <small class="text-muted">({{ student.Internal_Tests_Norm_Pct | round(1) }}%)</small></td>
+                        <td>{{ student.Mid_Term | int }}/40 <small class="text-muted">({{ student.Mid_Term_Norm_Pct | round(1) }}%)</small></td>
+                        <td>{{ student.End_Semester | int }}/60 <small class="text-muted">({{ student.End_Semester_Norm_Pct | round(1) }}%)</small></td>
+                        <td><strong class="accent-pct">{{ student.Final_Weighted_Pct | round(1) }}%</strong></td>
+                        <td><span class="badge badge-{{ student.Letter_Grade }}">{{ student.Letter_Grade }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script>
+        function filterTable() {
+            let input = document.getElementById("searchBar").value.toUpperCase();
+            let rows = document.getElementById("rosterTable").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+            for (let i = 0; i < rows.length; i++) {
+                let idCell = rows[i].getElementsByTagName("td")[0].textContent;
+                let nameCell = rows[i].getElementsByTagName("td")[1].textContent;
+                if (idCell.toUpperCase().indexOf(input) > -1 || nameCell.toUpperCase().indexOf(input) > -1) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+
+        let sortDirections = {};
+        function sortTable(columnIndex) {
+            let table = document.getElementById("rosterTable");
+            let tbody = table.getElementsByTagName("tbody")[0];
+            let rows = Array.from(tbody.getElementsByTagName("tr"));
+            
+            // Toggle direction
+            sortDirections[columnIndex] = !sortDirections[columnIndex];
+            let ascending = sortDirections[columnIndex];
+
+            rows.sort((rowA, rowB) => {
+                let cellA = rowA.getElementsByTagName("td")[columnIndex].textContent.trim();
+                let cellB = rowB.getElementsByTagName("td")[columnIndex].textContent.trim();
+                
+                // If checking numeric percentages, parse float instead of alphabetical match
+                if(columnIndex >= 2 && columnIndex <= 5) {
+                    cellA = parseFloat(cellA.replace(/[^0-9.]/g, '')) || 0;
+                    cellB = parseFloat(cellB.replace(/[^0-9.]/g, '')) || 0;
+                }
+                
+                if (cellA < cellB) return ascending ? -1 : 1;
+                if (cellA > cellB) return ascending ? 1 : -1;
+                return 0;
+            });
+
+            rows.forEach(row => tbody.appendChild(row));
+        }
+    </script>
+</body>
+</html>
