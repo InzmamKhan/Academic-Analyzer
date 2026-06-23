@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Analytics Dashboard</title>
+    <style>
+    
+:root {
+    --bg-main: #050505;       
+    --bg-panel: #121212;      
+    --border-color: #262626;  
+    --text-primary: #ffffff;  
+    --text-muted: #737373;    
+    
+    --accent-green: #a3e635;  
+    --accent-red: #f87171;    
+    --accent-blue: #ffffff;   
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    padding: 2.5rem 1rem;
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+header {
+    margin-bottom: 2.5rem;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.25rem;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+}
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.kpi-card {
+    background-color: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.kpi-card h3 {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.kpi-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.panel {
+    background-color: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.split-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .split-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+th, td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    color: var(--text-muted);
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+}
+
+th span {
+    font-size: 0.75rem;
+    margin-left: 0.25rem;
+    color: var(--border-color);
+}
+
+th:hover span {
+    color: var(--text-muted);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+.roster-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.roster-header h2 {
+    margin-bottom: 0;
+}
+
+#searchBar {
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    outline: none;
+    font-size: 0.85rem;
+    min-width: 260px;
+    transition: border-color 0.15s ease;
+}
+
+#searchBar:focus {
+    border-color: var(--accent-blue);
+}
+
+.risk-list {
+    list-style: none;
+}
+
+.risk-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.9rem;
+}
+
+.risk-item:last-child {
+    border-bottom: none;
+}
+
+.risk-badge {
+    color: var(--accent-red);
+    background-color: rgba(248, 113, 113, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.empty-state {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.accent-green { color: var(--accent-green); }
+.accent-pct { color: var(--accent-blue); }
+
+.badge {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+.badge-A { background: rgba(52, 211, 153, 0.15); color: var(--accent-green); }
+.badge-B { background: rgba(96, 165, 250, 0.15); color: var(--accent-blue); }
+.badge-C { background: rgba(148, 163, 184, 0.15); color: var(--text-primary); }
+.badge-D { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+.badge-F { background: rgba(248, 113, 113, 0.15); color: var(--accent-red); }
+</style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Academic Performance</h1>
+            <p class="subtitle">Cohort Grading & Analytics Report</p>
+        </header>
+
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <h3>Class Average</h3>
+                <div class="kpi-value">71.25%</div>
+            </div>
+            <div class="kpi-card">
+                <h3>Median Score</h3>
+                <div class="kpi-value">72.33%</div>
+            </div>
+            <div class="kpi-card">
+                <h3>Passing Rate</h3>
+                <div class="kpi-value accent-green">85.71%</div>
+            </div>
+            <div class="kpi-card">
+                <h3>Total Students</h3>
+                <div class="kpi-value">7</div>
+            </div>
+        </section>
+
+        <div class="split-layout">
+            <div class="panel">
+                <h2>Assessment Weights & Performance</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Max Marks</th>
+                            <th>Weight</th>
+                            <th>Normalized Avg</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr>
+                            <td><strong>Internal Tests</strong></td>
+                            <td>15</td>
+                            <td>20%</td>
+                            <td>74.29%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td><strong>Mid Term</strong></td>
+                            <td>40</td>
+                            <td>30%</td>
+                            <td>72.5%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td><strong>End Semester</strong></td>
+                            <td>60</td>
+                            <td>50%</td>
+                            <td>69.29%</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel">
+                <h2>Attention Required (At-Risk)</h2>
+                
+                <ul class="risk-list">
+                    
+                    <li class="risk-item">
+                        <span>Vikram Singh <small>(STU005)</small></span>
+                        <span class="risk-badge">30.7%</span>
+                    </li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+
+        <section class="panel roster-section">
+            <div class="roster-header">
+                <h2>Student Roster</h2>
+                <input type="text" id="searchBar" placeholder="Search by student name or ID..." onkeyup="filterTable()">
+            </div>
+            
+            <table id="rosterTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">ID <span>↕</span></th>
+                        <th onclick="sortTable(1)">Name <span>↕</span></th>
+                        <th onclick="sortTable(2)">Internal Tests <span>↕</span></th>
+                        <th onclick="sortTable(3)">Mid-Term <span>↕</span></th>
+                        <th onclick="sortTable(4)">End-Sem <span>↕</span></th>
+                        <th onclick="sortTable(5)">Weighted Grade <span>↕</span></th>
+                        <th onclick="sortTable(6)">Grade <span>↕</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td><small class="text-muted">STU001</small></td>
+                        <td><strong>Aarav Sharma</strong></td>
+                        <td>13/15 <small class="text-muted">(86.7%)</small></td>
+                        <td>34/40 <small class="text-muted">(85.0%)</small></td>
+                        <td>52/60 <small class="text-muted">(86.7%)</small></td>
+                        <td><strong class="accent-pct">86.2%</strong></td>
+                        <td><span class="badge badge-A">A</span></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><small class="text-muted">STU002</small></td>
+                        <td><strong>Priya Patel</strong></td>
+                        <td>14/15 <small class="text-muted">(93.3%)</small></td>
+                        <td>38/40 <small class="text-muted">(95.0%)</small></td>
+                        <td>58/60 <small class="text-muted">(96.7%)</small></td>
+                        <td><strong class="accent-pct">95.5%</strong></td>
+                        <td><span class="badge badge-A">A</span></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><small class="text-muted">STU003</small></td>
+                        <td><strong>Rohan Das</strong></td>
+                        <td>8/15 <small class="text-muted">(53.3%)</small></td>
+                        <td>22/40 <small class="text-muted">(55.0%)</small></td>
+                        <td>35/60 <small class="text-muted">(58.3%)</small></td>
+                        <td><strong class="accent-pct">56.3%</strong></td>
+                        <td><span class="badge badge-C">C</span></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><small class="text-muted">STU004</small></td>
+                        <td><strong>Ananya Iyer</strong></td>
+                        <td>15/15 <small class="text-muted">(100.0%)</small></td>
+                        <td>39/40 <small class="text-muted">(97.5%)</small></td>
+                        <td>60/60 <small class="text-muted">(100.0%)</small></td>
+                        <td><strong class="accent-pct">99.2%</strong></td>
+                        <td><span class="badge badge-A">A</span></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><small class="text-muted">STU005</small></td>
+                        <td><strong>Vikram Singh</strong></td>
+                        <td>5/15 <small class="text-muted">(33.3%)</small></td>
+                        <td>12/40 <small class="text-muted">(30.0%)</small></td>
+                        <td>18/60 <small class="text-muted">(30.0%)</small></td>
+                        <td><strong class="accent-pct">30.7%</strong></td>
+                        <td><span class="badge badge-F">F</span></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><small class="text-muted">STU006</small></td>
+                        <td><strong>Sneha Reddy</strong></td>
+                        <td>11/15 <small class="text-muted">(73.3%)</small></td>
+                        <td>28/40 <small class="text-muted">(70.0%)</small></td>
+                        <td>44/60 <small class="text-muted">(73.3%)</small></td>
+                        <td><strong class="accent-pct">72.3%</strong></td>
+                        <td><span class="badge badge-B">B</span></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><small class="text-muted">STU007</small></td>
+                        <td><strong>Kabir Mehta</strong></td>
+                        <td>12/15 <small class="text-muted">(80.0%)</small></td>
+                        <td>30/40 <small class="text-muted">(75.0%)</small></td>
+                        <td>24/60 <small class="text-muted">(40.0%)</small></td>
+                        <td><strong class="accent-pct">58.5%</strong></td>
+                        <td><span class="badge badge-C">C</span></td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script>
+        function filterTable() {
+            let input = document.getElementById("searchBar").value.toUpperCase();
+            let rows = document.getElementById("rosterTable").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+            for (let i = 0; i < rows.length; i++) {
+                let idCell = rows[i].getElementsByTagName("td")[0].textContent;
+                let nameCell = rows[i].getElementsByTagName("td")[1].textContent;
+                if (idCell.toUpperCase().indexOf(input) > -1 || nameCell.toUpperCase().indexOf(input) > -1) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+
+        let sortDirections = {};
+        function sortTable(columnIndex) {
+            let table = document.getElementById("rosterTable");
+            let tbody = table.getElementsByTagName("tbody")[0];
+            let rows = Array.from(tbody.getElementsByTagName("tr"));
+            
+            // Toggle direction
+            sortDirections[columnIndex] = !sortDirections[columnIndex];
+            let ascending = sortDirections[columnIndex];
+
+            rows.sort((rowA, rowB) => {
+                let cellA = rowA.getElementsByTagName("td")[columnIndex].textContent.trim();
+                let cellB = rowB.getElementsByTagName("td")[columnIndex].textContent.trim();
+                
+                // If checking numeric percentages, parse float instead of alphabetical match
+                if(columnIndex >= 2 && columnIndex <= 5) {
+                    cellA = parseFloat(cellA.replace(/[^0-9.]/g, '')) || 0;
+                    cellB = parseFloat(cellB.replace(/[^0-9.]/g, '')) || 0;
+                }
+                
+                if (cellA < cellB) return ascending ? -1 : 1;
+                if (cellA > cellB) return ascending ? 1 : -1;
+                return 0;
+            });
+
+            rows.forEach(row => tbody.appendChild(row));
+        }
+    </script>
+</body>
+</html>
