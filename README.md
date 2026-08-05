@@ -14,7 +14,7 @@ An elegant, production-ready, modular Python system designed to ingest student g
 
 ## 📂 Project Architecture
 
-```text
+```text 
 academic_analyzer/
 │
 ├── config/
