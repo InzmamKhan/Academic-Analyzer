@@ -2,7 +2,7 @@
 
 An elegant, production-ready, modular Python system designed to ingest student gradebook data, calculate complex weighted academic metrics, and generate a self-contained, interactive minimalist dark-themed HTML report.
 
-## 🌟 Features  
+## 🌟 Features 
 
 - **Modular Architecture:** Complete decoupling of data parsing, business logic/analytics, and frontend UI presentation.
 - **Robust Data Sanitization:** Defensive parsing engine that handles missing entries, trims whitespace, and validates schema integrity automatically.
